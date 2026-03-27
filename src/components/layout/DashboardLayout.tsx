@@ -1,7 +1,8 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Vote, LayoutDashboard, Users, Building2, CreditCard, FileText, Settings, Shield, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DashboardLayoutProps {
   role: "global-admin" | "group-admin" | "member";
