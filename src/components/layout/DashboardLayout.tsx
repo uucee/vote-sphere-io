@@ -49,8 +49,15 @@ const navConfig = {
 
 const DashboardLayout = ({ role }: DashboardLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut, profile } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const config = navConfig[role];
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
     <div className="flex min-h-screen">
