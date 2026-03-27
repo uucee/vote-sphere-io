@@ -21,7 +21,13 @@ import NotFound from "@/pages/NotFound";
 
 import AdminDashboard from "@/pages/admin/Dashboard";
 import GroupDashboard from "@/pages/group/Dashboard";
+import GroupElections from "@/pages/group/Elections";
+import ElectionCreate from "@/pages/group/ElectionCreate";
+import ElectionDetail from "@/pages/group/ElectionDetail";
 import MemberDashboard from "@/pages/member/Dashboard";
+import MemberNominations from "@/pages/member/Nominations";
+import MemberVotePage from "@/pages/member/VotePage";
+import MemberResults from "@/pages/member/Results";
 import PlaceholderPage from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -69,7 +75,9 @@ const App = () => (
             }>
               <Route path="/group" element={<GroupDashboard />} />
               <Route path="/group/members" element={<PlaceholderPage title="Member Management" />} />
-              <Route path="/group/elections" element={<PlaceholderPage title="Elections" />} />
+              <Route path="/group/elections" element={<GroupElections />} />
+              <Route path="/group/elections/new" element={<ElectionCreate />} />
+              <Route path="/group/elections/:id" element={<ElectionDetail />} />
               <Route path="/group/results" element={<PlaceholderPage title="Results" />} />
               <Route path="/group/billing" element={<PlaceholderPage title="Billing & Subscription" />} />
               <Route path="/group/audit" element={<PlaceholderPage title="Audit Logs" />} />
@@ -83,9 +91,9 @@ const App = () => (
               </ProtectedRoute>
             }>
               <Route path="/member" element={<MemberDashboard />} />
-              <Route path="/member/nominations" element={<PlaceholderPage title="Nominations" />} />
-              <Route path="/member/vote" element={<PlaceholderPage title="Cast Your Vote" />} />
-              <Route path="/member/results" element={<PlaceholderPage title="Published Results" />} />
+              <Route path="/member/nominations" element={<MemberNominations />} />
+              <Route path="/member/vote" element={<MemberVotePage />} />
+              <Route path="/member/results" element={<MemberResults />} />
               <Route path="/member/profile" element={<PlaceholderPage title="My Profile" />} />
             </Route>
 
