@@ -116,13 +116,13 @@ const DashboardLayout = ({ role }: DashboardLayoutProps) => {
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
             {!collapsed && "Collapse"}
           </button>
-          <Link
-            to="/login"
+          <button
+            onClick={handleSignOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50"
           >
             <LogOut className="h-4 w-4" />
             {!collapsed && "Sign Out"}
-          </Link>
+          </button>
         </div>
       </aside>
 
