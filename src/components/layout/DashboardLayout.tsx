@@ -1,7 +1,8 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { Vote, LayoutDashboard, Users, Building2, CreditCard, FileText, Settings, Shield, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DashboardLayoutProps {
   role: "global-admin" | "group-admin" | "member";
@@ -48,8 +49,15 @@ const navConfig = {
 
 const DashboardLayout = ({ role }: DashboardLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut, profile } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const config = navConfig[role];
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
 
   return (
     <div className="flex min-h-screen">
@@ -108,13 +116,13 @@ const DashboardLayout = ({ role }: DashboardLayoutProps) => {
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
             {!collapsed && "Collapse"}
           </button>
-          <Link
-            to="/login"
+          <button
+            onClick={handleSignOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent/50"
           >
             <LogOut className="h-4 w-4" />
             {!collapsed && "Sign Out"}
-          </Link>
+          </button>
         </div>
       </aside>
 
