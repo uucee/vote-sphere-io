@@ -21,7 +21,13 @@ import NotFound from "@/pages/NotFound";
 
 import AdminDashboard from "@/pages/admin/Dashboard";
 import GroupDashboard from "@/pages/group/Dashboard";
+import GroupElections from "@/pages/group/Elections";
+import ElectionCreate from "@/pages/group/ElectionCreate";
+import ElectionDetail from "@/pages/group/ElectionDetail";
 import MemberDashboard from "@/pages/member/Dashboard";
+import MemberNominations from "@/pages/member/Nominations";
+import MemberVotePage from "@/pages/member/VotePage";
+import MemberResults from "@/pages/member/Results";
 import PlaceholderPage from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
