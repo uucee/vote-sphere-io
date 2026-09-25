@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Vote, CheckCircle2, User } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -21,6 +22,7 @@ const MemberVotePage = () => {
   const [selections, setSelections] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [announcement, setAnnouncement] = useState("");
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -108,6 +110,7 @@ const MemberVotePage = () => {
       if (error) throw error;
 
       toast.success("Vote cast successfully!");
+      setAnnouncement("Your vote was recorded successfully.");
       // Refresh votes
       const { data: votes } = await supabase
         .from("votes")
@@ -117,13 +120,20 @@ const MemberVotePage = () => {
       setMyVotes(votes || []);
     } catch (err: any) {
       toast.error(err.message || "Failed to cast vote");
+      setAnnouncement(`Your vote was not recorded: ${err.message || "please try again"}.`);
     } finally {
       setSubmitting(null);
     }
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Loading…</span></div>;
+    return (
+      <div className="space-y-4" role="status" aria-label="Loading ballot">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-40 w-full" />
+        <Skeleton className="h-40 w-full" />
+      </div>
+    );
   }
 
   if (elections.length === 0) {
@@ -131,7 +141,7 @@ const MemberVotePage = () => {
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Cast Your Vote</h1>
         <div className="glass-card flex flex-col items-center justify-center py-16">
-          <Vote className="h-12 w-12 text-muted-foreground/50" />
+          <Vote className="h-12 w-12 text-muted-foreground" aria-hidden="true" />
           <p className="mt-4 text-muted-foreground">No elections are currently open for voting.</p>
         </div>
       </div>
@@ -140,8 +150,9 @@ const MemberVotePage = () => {
 
   return (
     <div className="space-y-6">
+      <p className="sr-only" role="status" aria-live="polite">{announcement}</p>
       <div>
-        <h1 className="text-2xl font-bold">Cast Your Vote</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Cast Your Vote</h1>
         <p className="text-sm text-muted-foreground">Select your preferred candidate for each position.</p>
       </div>
 
@@ -158,8 +169,8 @@ const MemberVotePage = () => {
 
               return (
                 <div key={pos.id} className="glass-card p-5 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
                       <p className="font-semibold">{pos.title}</p>
                       {pos.description && <p className="text-sm text-muted-foreground">{pos.description}</p>}
                     </div>
@@ -179,8 +190,10 @@ const MemberVotePage = () => {
                         return (
                           <button
                             key={cand.id}
+                            type="button"
+                            aria-pressed={isSelected}
                             onClick={() => setSelections(prev => ({ ...prev, [pos.id]: cand.id }))}
-                            className={`flex items-center gap-3 rounded-lg border-2 p-4 text-left transition-all ${
+                            className={`flex items-center gap-3 rounded-lg border-2 min-h-[64px] p-4 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none ${
                               isSelected
                                 ? "border-primary bg-primary/5 shadow-sm"
                                 : "border-border hover:border-primary/30 hover:bg-muted/50"
@@ -203,8 +216,10 @@ const MemberVotePage = () => {
                   )}
 
                   {posCandidates.length > 0 && (
-                    <div className="flex justify-end">
+                    <div className="sticky bottom-0 -mx-5 -mb-5 border-t border-border/50 bg-card/95 px-5 py-3 pb-safe backdrop-blur sm:static sm:m-0 sm:flex sm:justify-end sm:border-0 sm:bg-transparent sm:p-0">
                       <Button
+                        size="lg"
+                        className="w-full sm:w-auto"
                         onClick={() => handleVote(pos.id, election.id)}
                         disabled={!selections[pos.id] || submitting === pos.id}
                       >
