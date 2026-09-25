@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,25 +10,25 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import PublicLayout from "@/components/layout/PublicLayout";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
-import HomePage from "@/pages/Home";
-import FeaturesPage from "@/pages/Features";
-import PricingPage from "@/pages/Pricing";
-import ContactPage from "@/pages/Contact";
-import LoginPage from "@/pages/Login";
-import RegisterPage from "@/pages/Register";
-import ForgotPasswordPage from "@/pages/ForgotPassword";
-import UnauthorizedPage from "@/pages/Unauthorized";
-import NotFound from "@/pages/NotFound";
+const HomePage = lazy(() => import("@/pages/Home"));
+const FeaturesPage = lazy(() => import("@/pages/Features"));
+const PricingPage = lazy(() => import("@/pages/Pricing"));
+const ContactPage = lazy(() => import("@/pages/Contact"));
+const LoginPage = lazy(() => import("@/pages/Login"));
+const RegisterPage = lazy(() => import("@/pages/Register"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPassword"));
+const UnauthorizedPage = lazy(() => import("@/pages/Unauthorized"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
-import AdminDashboard from "@/pages/admin/Dashboard";
-import GroupDashboard from "@/pages/group/Dashboard";
-import GroupElections from "@/pages/group/Elections";
-import ElectionCreate from "@/pages/group/ElectionCreate";
-import ElectionDetail from "@/pages/group/ElectionDetail";
-import MemberDashboard from "@/pages/member/Dashboard";
-import MemberNominations from "@/pages/member/Nominations";
-import MemberVotePage from "@/pages/member/VotePage";
-import MemberResults from "@/pages/member/Results";
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const GroupDashboard = lazy(() => import("@/pages/group/Dashboard"));
+const GroupElections = lazy(() => import("@/pages/group/Elections"));
+const ElectionCreate = lazy(() => import("@/pages/group/ElectionCreate"));
+const ElectionDetail = lazy(() => import("@/pages/group/ElectionDetail"));
+const MemberDashboard = lazy(() => import("@/pages/member/Dashboard"));
+const MemberNominations = lazy(() => import("@/pages/member/Nominations"));
+const MemberVotePage = lazy(() => import("@/pages/member/VotePage"));
+const MemberResults = lazy(() => import("@/pages/member/Results"));
 import PlaceholderPage from "@/components/PlaceholderPage";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <Suspense fallback={<div className="flex min-h-dvh items-center justify-center" role="status" aria-live="polite"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /><span className="sr-only">Loading…</span></div>}>
           <Routes>
             {/* Public routes */}
             <Route element={<PublicLayout />}>
@@ -99,6 +101,7 @@ const App = () => (
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
