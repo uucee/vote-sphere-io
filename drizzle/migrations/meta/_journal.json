@@ -8,6 +8,13 @@
       "when": 1790335586614,
       "tag": "0000_tighten_invitations_settings_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790341891685,
+      "tag": "0001_election_integrity_hardening",
+      "breakpoints": true
     }
   ]
 }
