@@ -995,11 +995,43 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      advance_election: {
+        Args: {
+          p_election_id: string
+          p_expected_status: Database["public"]["Enums"]["election_status"]
+        }
+        Returns: Database["public"]["Enums"]["election_status"]
+      }
+      cast_vote: {
+        Args: { p_candidate_id: string; p_position_id: string }
+        Returns: undefined
+      }
+      create_organisation: { Args: never; Returns: string }
+      get_my_ballot: {
+        Args: { p_election_id: string }
+        Returns: {
+          candidate_id: string
+          cast_at: string
+          position_id: string
+        }[]
+      }
+      get_turnout: {
+        Args: { p_election_id: string }
+        Returns: {
+          eligible: number
+          position_id: string
+          voters: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_draft_election_of_group: {
+        Args: { _election_id: string; _group_id: string }
         Returns: boolean
       }
       is_group_admin: {
@@ -1008,6 +1040,18 @@ export type Database = {
       }
       is_group_member: {
         Args: { _group_id: string; _user_id: string }
+        Returns: boolean
+      }
+      respond_to_candidacy: {
+        Args: { p_accept: boolean; p_candidate_id: string }
+        Returns: undefined
+      }
+      submit_nomination: {
+        Args: { p_nominee_member_id: string; p_position_id: string }
+        Returns: string
+      }
+      vote_editing_allowed: {
+        Args: { p_election_id: string }
         Returns: boolean
       }
     }
