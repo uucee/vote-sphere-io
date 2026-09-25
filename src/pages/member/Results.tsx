@@ -5,57 +5,62 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Trophy, Award, FileText } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
+import NoGroupState from "@/components/NoGroupState";
 
 type ResultSummary = Tables<"result_summaries"> & { candidate_name?: string; position_title?: string };
 
 const MemberResults = () => {
-  const { groupId } = useGroupContext();
+  const { groupId, loading: groupLoading } = useGroupContext();
   const [elections, setElections] = useState<Tables<"election_cycles">[]>([]);
   const [results, setResults] = useState<ResultSummary[]>([]);
   const [positions, setPositions] = useState<Tables<"positions">[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!groupId) return;
+    if (groupLoading) return;
+    if (!groupId) { setLoading(false); return; }
     const load = async () => {
-      const { data: els } = await supabase
-        .from("election_cycles")
-        .select("*")
-        .eq("group_id", groupId)
-        .eq("status", "published")
-        .order("created_at", { ascending: false });
-      setElections(els || []);
-
-      if (els && els.length > 0) {
-        const elIds = els.map(e => e.id);
-
-        const { data: pos } = await supabase
-          .from("positions")
+      try {
+        const { data: els } = await supabase
+          .from("election_cycles")
           .select("*")
-          .in("election_cycle_id", elIds);
-        setPositions(pos || []);
-
-        const { data: res } = await supabase
-          .from("result_summaries")
-          .select("*, candidate_selections!result_summaries_candidate_id_fkey(member_id, members!candidate_selections_member_id_fkey(full_name))")
           .eq("group_id", groupId)
-          .in("election_cycle_id", elIds)
-          .order("rank");
+          .eq("status", "published")
+          .order("created_at", { ascending: false });
+        setElections(els || []);
 
-        if (res) {
-          setResults(res.map((r: any) => ({
-            ...r,
-            candidate_name: r.candidate_selections?.members?.full_name || "Unknown",
-            position_title: pos?.find(p => p.id === r.position_id)?.title,
-          })));
+        if (els && els.length > 0) {
+          const elIds = els.map(e => e.id);
+
+          const { data: pos } = await supabase
+            .from("positions")
+            .select("*")
+            .in("election_cycle_id", elIds);
+          setPositions(pos || []);
+
+          const { data: res } = await supabase
+            .from("result_summaries")
+            .select("*, candidate_selections!result_summaries_candidate_id_fkey(member_id, members!candidate_selections_member_id_fkey(full_name))")
+            .eq("group_id", groupId)
+            .in("election_cycle_id", elIds)
+            .order("rank");
+
+          if (res) {
+            setResults(res.map((r: any) => ({
+              ...r,
+              candidate_name: r.candidate_selections?.members?.full_name || "Unknown",
+              position_title: pos?.find(p => p.id === r.position_id)?.title,
+            })));
+          }
         }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
-  }, [groupId]);
+  }, [groupId, groupLoading]);
 
-  if (loading) {
+  if (groupLoading || loading) {
     return (
       <div className="space-y-4" role="status" aria-label="Loading results">
         <Skeleton className="h-8 w-56" />
@@ -64,6 +69,8 @@ const MemberResults = () => {
       </div>
     );
   }
+
+  if (!groupId) return <NoGroupState title="Election Results" />;
 
   if (elections.length === 0) {
     return (
