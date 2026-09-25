@@ -64,7 +64,7 @@ const DashboardLayout = ({ role }: DashboardLayoutProps) => {
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary">
           <Vote className="h-4 w-4 text-sidebar-primary-foreground" aria-hidden="true" />
         </div>
-        {!compact && <span className="text-lg font-bold">BallotBox</span>}
+        {!compact && <span className="text-lg font-bold">VoteWell Secure</span>}
       </div>
 
       {!compact && (
