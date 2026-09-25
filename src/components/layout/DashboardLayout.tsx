@@ -60,7 +60,7 @@ const DashboardLayout = ({ role }: DashboardLayoutProps) => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-dvh">
       {/* Sidebar */}
       <aside
         className={cn(

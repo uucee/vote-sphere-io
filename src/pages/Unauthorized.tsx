@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ShieldAlert } from "lucide-react";
 
 const UnauthorizedPage = () => (
-  <div className="flex min-h-screen items-center justify-center px-4">
+  <div className="flex min-h-dvh items-center justify-center px-4">
     <div className="text-center">
       <ShieldAlert className="mx-auto h-16 w-16 text-destructive" />
       <h1 className="mt-4 text-2xl font-bold">Access Denied</h1>
