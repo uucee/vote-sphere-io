@@ -95,7 +95,7 @@ const RegisterPage = () => {
             <div className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="orgName">Organisation Name</Label>
-                <Input id="orgName" required placeholder="e.g. National Alumni Association" value={orgName} onChange={(e) => setOrgName(e.target.value)} />
+                <Input id="orgName" autoComplete="organization" required placeholder="e.g. National Alumni Association" value={orgName} onChange={(e) => setOrgName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="orgType">Organisation Type</Label>
@@ -135,11 +135,11 @@ const RegisterPage = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" required placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  <Input id="firstName" autoComplete="given-name" required placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" required placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                  <Input id="lastName" autoComplete="family-name" required placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">

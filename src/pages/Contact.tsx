@@ -74,11 +74,11 @@ const ContactPage = () => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" required placeholder="John" />
+                    <Input id="firstName" autoComplete="given-name" required placeholder="John" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" required placeholder="Doe" />
+                    <Input id="lastName" autoComplete="family-name" required placeholder="Doe" />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -87,7 +87,7 @@ const ContactPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="org">Organisation</Label>
-                  <Input id="org" placeholder="Your organisation name" />
+                  <Input id="org" autoComplete="organization" placeholder="Your organisation name" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="message">Message</Label>
