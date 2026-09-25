@@ -3,7 +3,7 @@ import { Vote, FileText, Bell, UserCircle, Key } from "lucide-react";
 const MemberDashboard = () => (
   <div className="space-y-6">
     <div>
-      <h1 className="text-2xl font-bold">Welcome Back</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Welcome Back</h1>
       <p className="text-sm text-muted-foreground">View your elections, nominations, and voting activity.</p>
     </div>
 
@@ -70,7 +70,7 @@ const MemberDashboard = () => (
           { label: "View Results", icon: FileText },
           { label: "My Profile", icon: UserCircle },
         ].map((a) => (
-          <button key={a.label} className="flex items-center gap-3 rounded-lg border border-border p-4 text-left transition-colors hover:bg-muted">
+          <button key={a.label} className="flex items-center gap-3 rounded-lg border border-border min-h-[44px] p-4 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <a.icon className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium">{a.label}</span>
           </button>

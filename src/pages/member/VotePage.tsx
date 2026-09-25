@@ -139,7 +139,7 @@ const MemberVotePage = () => {
   if (elections.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Cast Your Vote</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Cast Your Vote</h1>
         <div className="glass-card flex flex-col items-center justify-center py-16">
           <Vote className="h-12 w-12 text-muted-foreground" aria-hidden="true" />
           <p className="mt-4 text-muted-foreground">No elections are currently open for voting.</p>
