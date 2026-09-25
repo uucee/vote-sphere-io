@@ -15,6 +15,7 @@ const MemberResults = () => {
   const [results, setResults] = useState<ResultSummary[]>([]);
   const [positions, setPositions] = useState<Tables<"positions">[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ties, setTies] = useState<Tables<"tie_resolutions">[]>([]);
 
   useEffect(() => {
     if (groupLoading) return;
@@ -37,6 +38,9 @@ const MemberResults = () => {
             .select("*")
             .in("election_cycle_id", elIds);
           setPositions(pos || []);
+
+          const { data: tr } = await supabase.from("tie_resolutions").select("*").in("election_cycle_id", elIds);
+          setTies(tr || []);
 
           const { data: res } = await supabase
             .from("result_summaries")
@@ -129,6 +133,11 @@ const MemberResults = () => {
                         </li>
                       ))}
                     </ol>
+                  )}
+                  {ties.find(t => t.position_id === pos.id) && (
+                    <p className="text-sm text-muted-foreground">
+                      Tie resolved by the organisation: {ties.find(t => t.position_id === pos.id)!.reason}
+                    </p>
                   )}
                 </div>
               );
