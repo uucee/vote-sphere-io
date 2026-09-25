@@ -49,6 +49,7 @@ const LoginPage = () => {
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
                 required
                 placeholder="you@example.com"
                 value={email}
@@ -65,6 +66,7 @@ const LoginPage = () => {
               <Input
                 id="password"
                 type="password"
+                autoComplete="current-password"
                 required
                 placeholder="••••••••"
                 value={password}

@@ -3,7 +3,7 @@ import { Vote, FileText, Bell, UserCircle, Key } from "lucide-react";
 const MemberDashboard = () => (
   <div className="space-y-6">
     <div>
-      <h1 className="text-2xl font-bold">Welcome Back</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Welcome Back</h1>
       <p className="text-sm text-muted-foreground">View your elections, nominations, and voting activity.</p>
     </div>
 
@@ -44,7 +44,7 @@ const MemberDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Notifications</h3>
+      <h2 className="font-semibold">Notifications</h2>
       <div className="mt-4 space-y-3">
         {[
           { msg: "You've been nominated for Vice President", time: "1 hour ago", urgent: true },
@@ -63,14 +63,14 @@ const MemberDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Quick Actions</h3>
+      <h2 className="font-semibold">Quick Actions</h2>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {[
           { label: "Cast Vote", icon: Vote },
           { label: "View Results", icon: FileText },
           { label: "My Profile", icon: UserCircle },
         ].map((a) => (
-          <button key={a.label} className="flex items-center gap-3 rounded-lg border border-border p-4 text-left transition-colors hover:bg-muted">
+          <button key={a.label} className="flex items-center gap-3 rounded-lg border border-border min-h-[44px] p-4 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             <a.icon className="h-5 w-5 text-primary" />
             <span className="text-sm font-medium">{a.label}</span>
           </button>

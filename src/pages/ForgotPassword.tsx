@@ -55,6 +55,7 @@ const ForgotPasswordPage = () => {
                 <Input
                   id="email"
                   type="email"
+                  autoComplete="email"
                   required
                   placeholder="you@example.com"
                   value={email}

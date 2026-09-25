@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useGroupContext } from "@/hooks/useGroupContext";
@@ -119,15 +120,21 @@ const MemberNominations = () => {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Loading…</span></div>;
+    return (
+      <div className="space-y-4" role="status" aria-label="Loading">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
   }
 
   if (elections.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Nominations</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Nominations</h1>
         <div className="glass-card flex flex-col items-center justify-center py-16">
-          <Users className="h-12 w-12 text-muted-foreground/50" />
+          <Users className="h-12 w-12 text-muted-foreground" aria-hidden="true" />
           <p className="mt-4 text-muted-foreground">No elections are currently accepting nominations.</p>
         </div>
       </div>
@@ -137,7 +144,7 @@ const MemberNominations = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Nominations</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Nominations</h1>
         <p className="text-sm text-muted-foreground">Nominate candidates for open positions.</p>
       </div>
 

@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -146,20 +147,26 @@ const ElectionDetail = () => {
   };
 
   if (loading || !election) {
-    return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Loading…</span></div>;
+    return (
+      <div className="space-y-4" role="status" aria-label="Loading">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
   }
 
   const flow = statusFlow[election.status];
 
   return (
     <div className="max-w-4xl space-y-6">
-      <button onClick={() => navigate("/group/elections")} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <button onClick={() => navigate("/group/elections")} className="flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Back to Elections
       </button>
 
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">{election.title}</h1>
+          <h1 className="text-xl font-bold sm:text-2xl">{election.title}</h1>
           {election.description && <p className="mt-1 text-sm text-muted-foreground">{election.description}</p>}
         </div>
         <Badge className="text-sm">{statusLabel(election.status)}</Badge>
@@ -182,7 +189,7 @@ const ElectionDetail = () => {
 
       {/* Advance status */}
       {flow && (
-        <div className="glass-card flex items-center justify-between p-5">
+        <div className="glass-card flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-medium">Next Step</p>
             <p className="text-sm text-muted-foreground">{flow.label}</p>
@@ -196,7 +203,7 @@ const ElectionDetail = () => {
 
       {/* Positions */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">Positions</h3>
+        <h2 className="text-lg font-semibold">Positions</h2>
         {positions.map((pos) => {
           const posCandidates = candidates.filter(c => c.position_id === pos.id);
           return (
@@ -217,7 +224,7 @@ const ElectionDetail = () => {
                   <p className="text-xs font-medium text-muted-foreground mb-2">Selected Candidates</p>
                   <div className="space-y-2">
                     {posCandidates.map((c) => (
-                      <div key={c.id} className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
+                      <div key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-muted/50 px-3 py-2">
                         <span className="text-sm font-medium">{c.member_name || "Unknown"}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground">{c.nomination_count} nominations</span>

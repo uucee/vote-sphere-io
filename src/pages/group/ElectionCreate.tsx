@@ -95,12 +95,12 @@ const ElectionCreate = () => {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <button onClick={() => navigate(-1)} className="flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Back
       </button>
 
       <div>
-        <h1 className="text-2xl font-bold">Create Election</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Create Election</h1>
         <p className="text-sm text-muted-foreground">Set up a new election cycle with positions.</p>
       </div>
 
@@ -159,7 +159,7 @@ const ElectionCreate = () => {
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-muted-foreground">Position {i + 1}</span>
                 {positions.length > 1 && (
-                  <Button type="button" variant="ghost" size="icon" onClick={() => removePosition(i)}>
+                  <Button type="button" variant="ghost" size="icon" className="h-11 w-11" aria-label={`Remove position ${i + 1}`} onClick={() => removePosition(i)}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 )}
@@ -186,9 +186,9 @@ const ElectionCreate = () => {
           ))}
         </div>
 
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="outline" onClick={() => navigate(-1)}>Cancel</Button>
-          <Button type="submit" disabled={saving}>{saving ? "Creating…" : "Create Election"}</Button>
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={() => navigate(-1)}>Cancel</Button>
+          <Button type="submit" className="w-full sm:w-auto" disabled={saving}>{saving ? "Creating…" : "Create Election"}</Button>
         </div>
       </form>
     </div>

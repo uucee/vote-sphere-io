@@ -95,7 +95,7 @@ const RegisterPage = () => {
             <div className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="orgName">Organisation Name</Label>
-                <Input id="orgName" required placeholder="e.g. National Alumni Association" value={orgName} onChange={(e) => setOrgName(e.target.value)} />
+                <Input id="orgName" autoComplete="organization" required placeholder="e.g. National Alumni Association" value={orgName} onChange={(e) => setOrgName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="orgType">Organisation Type</Label>
@@ -135,20 +135,20 @@ const RegisterPage = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" required placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                  <Input id="firstName" autoComplete="given-name" required placeholder="John" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" required placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                  <Input id="lastName" autoComplete="family-name" required placeholder="Doe" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input id="email" type="email" autoComplete="email" required placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input id="password" type="password" autoComplete="new-password" required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1" onClick={() => setStep(1)}>Back</Button>

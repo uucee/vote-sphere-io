@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,24 +47,30 @@ const GroupElections = () => {
   }, [groupId]);
 
   if (groupLoading || loading) {
-    return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Loading…</span></div>;
+    return (
+      <div className="space-y-4" role="status" aria-label="Loading">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Elections</h1>
+          <h1 className="text-xl font-bold sm:text-2xl">Elections</h1>
           <p className="text-sm text-muted-foreground">Create and manage election cycles.</p>
         </div>
-        <Button asChild>
+        <Button asChild className="w-full sm:w-auto">
           <Link to="/group/elections/new"><Plus className="mr-2 h-4 w-4" />New Election</Link>
         </Button>
       </div>
 
       {elections.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center py-16">
-          <Vote className="h-12 w-12 text-muted-foreground/50" />
+          <Vote className="h-12 w-12 text-muted-foreground" aria-hidden="true" />
           <p className="mt-4 text-muted-foreground">No elections yet. Create your first one.</p>
         </div>
       ) : (
@@ -72,16 +79,16 @@ const GroupElections = () => {
             <Link
               key={e.id}
               to={`/group/elections/${e.id}`}
-              className="glass-card flex items-center justify-between p-5 transition-colors hover:bg-muted/50"
+              className="glass-card flex flex-col gap-3 p-4 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:flex-row sm:items-center sm:justify-between sm:p-5"
             >
-              <div className="space-y-1">
-                <p className="font-semibold">{e.title}</p>
+              <div className="min-w-0 space-y-1">
+                <p className="break-words font-semibold">{e.title}</p>
                 <p className="text-xs text-muted-foreground">
                   Created {format(new Date(e.created_at), "MMM d, yyyy")}
                   {e.voting_start && ` · Voting ${format(new Date(e.voting_start), "MMM d")} – ${e.voting_end ? format(new Date(e.voting_end), "MMM d") : "TBD"}`}
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between gap-3 sm:justify-end">
                 <Badge className={statusColors[e.status] || ""}>{statusLabel(e.status)}</Badge>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </div>

@@ -17,7 +17,7 @@ const recentActivity = [
 const AdminDashboard = () => (
   <div className="space-y-6">
     <div>
-      <h1 className="text-2xl font-bold">Platform Overview</h1>
+      <h1 className="text-xl font-bold sm:text-2xl">Platform Overview</h1>
       <p className="text-sm text-muted-foreground">Monitor all groups, payments, and platform activity.</p>
     </div>
 
@@ -39,10 +39,10 @@ const AdminDashboard = () => (
 
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="glass-card p-5">
-        <h3 className="font-semibold">Recent Activity</h3>
+        <h2 className="font-semibold">Recent Activity</h2>
         <div className="mt-4 space-y-3">
           {recentActivity.map((a, i) => (
-            <div key={i} className="flex items-center justify-between border-b border-border/50 pb-3 last:border-0">
+            <div key={i} className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3 last:border-0">
               <div>
                 <p className="text-sm font-medium">{a.action}</p>
                 <p className="text-xs text-muted-foreground">{a.group}</p>
@@ -54,7 +54,7 @@ const AdminDashboard = () => (
       </div>
 
       <div className="glass-card p-5">
-        <h3 className="font-semibold">Alerts</h3>
+        <h2 className="font-semibold">Alerts</h2>
         <div className="mt-4 space-y-3">
           <div className="flex items-start gap-3 rounded-lg bg-destructive/5 p-3">
             <AlertCircle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
