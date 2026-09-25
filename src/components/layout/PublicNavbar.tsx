@@ -21,7 +21,7 @@ const PublicNavbar = () => {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
             <Vote className="h-5 w-5 text-primary-foreground" aria-hidden="true" />
           </div>
-          <span className="text-xl font-bold text-foreground">BallotBox</span>
+          <span className="text-xl font-bold text-foreground"><span className="sm:hidden">VoteWell</span><span className="hidden sm:inline">VoteWell Secure</span></span>
         </Link>
 
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">

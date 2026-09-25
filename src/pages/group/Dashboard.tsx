@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Users, Vote, BarChart3, Bell, Clock, CheckCircle2 } from "lucide-react";
 
 const stats = [
@@ -52,17 +53,17 @@ const GroupDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h2 className="font-semibold">Quick Actions</h2>
+      <h2 className="font-semibold">Quick actions</h2>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {[
-          { label: "Invite Members", icon: Users },
-          { label: "Create Election", icon: Vote },
-          { label: "View Results", icon: CheckCircle2 },
+          { label: "Invite members", icon: Users, to: "/group/members" },
+          { label: "Create election", icon: Vote, to: "/group/elections/new" },
+          { label: "View results", icon: CheckCircle2, to: "/group/results" },
         ].map((a) => (
-          <button key={a.label} className="flex items-center gap-3 rounded-lg border border-border min-h-[44px] p-4 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <a.icon className="h-5 w-5 text-primary" />
+          <Link key={a.label} to={a.to} className="flex items-center gap-3 rounded-lg border border-border min-h-[44px] p-4 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <a.icon className="h-5 w-5 text-primary" aria-hidden="true" />
             <span className="text-sm font-medium">{a.label}</span>
-          </button>
+          </Link>
         ))}
       </div>
     </div>

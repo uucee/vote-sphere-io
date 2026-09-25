@@ -34,7 +34,12 @@ const RegisterPage = () => {
     }
     setLoading(true);
     const fullName = `${firstName} ${lastName}`.trim();
-    const { error } = await signUp(email, password, fullName);
+    const { error } = await signUp(email, password, fullName, {
+      org_name: orgName.trim(),
+      org_type: orgType,
+      org_size: orgSize,
+      selected_plan: selectedPlan,
+    });
     setLoading(false);
     if (error) {
       toast({ title: "Registration failed", description: error.message, variant: "destructive" });

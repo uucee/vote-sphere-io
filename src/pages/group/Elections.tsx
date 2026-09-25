@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Vote, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
 import type { Tables } from "@/integrations/supabase/types";
+import NoGroupState from "@/components/NoGroupState";
 
 type Election = Tables<"election_cycles">;
 
@@ -33,18 +34,22 @@ const GroupElections = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!groupId) return;
+    if (groupLoading) return;
+    if (!groupId) { setLoading(false); return; }
     const load = async () => {
-      const { data } = await supabase
-        .from("election_cycles")
-        .select("*")
-        .eq("group_id", groupId)
-        .order("created_at", { ascending: false });
-      setElections(data || []);
-      setLoading(false);
+      try {
+        const { data } = await supabase
+          .from("election_cycles")
+          .select("*")
+          .eq("group_id", groupId)
+          .order("created_at", { ascending: false });
+        setElections(data || []);
+      } finally {
+        setLoading(false);
+      }
     };
     load();
-  }, [groupId]);
+  }, [groupId, groupLoading]);
 
   if (groupLoading || loading) {
     return (
@@ -55,6 +60,8 @@ const GroupElections = () => {
       </div>
     );
   }
+
+  if (!groupId) return <NoGroupState title="Elections" />;
 
   return (
     <div className="space-y-6">

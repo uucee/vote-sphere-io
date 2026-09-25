@@ -4,31 +4,60 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Vote } from "lucide-react";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { useAuth, type AppRole } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { rpcErrorMessage } from "@/lib/rpcErrors";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
-  const { toast } = useToast();
+  const [announcement, setAnnouncement] = useState("");
+  const { signIn, refreshRoles } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/";
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname;
+
+  const destinationFor = (roles: AppRole[]) => {
+    if (from && from !== "/") return from;
+    if (roles.includes("global_admin")) return "/admin";
+    if (roles.includes("group_admin")) return "/group";
+    if (roles.includes("member")) return "/member";
+    return "/unauthorized";
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const { error } = await signIn(email, password);
-    setLoading(false);
     if (error) {
-      toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
-    } else {
-      toast({ title: "Welcome back!" });
-      navigate(from, { replace: true });
+      setLoading(false);
+      const msg = /confirm/i.test(error.message)
+        ? "Please confirm your email address first."
+        : "Your email or password is incorrect.";
+      toast.error(msg);
+      setAnnouncement(msg);
+      return;
     }
+
+    let roles = await refreshRoles();
+    if (roles.length === 0) {
+      const { data } = await supabase.auth.getUser();
+      if (data.user?.user_metadata?.org_name) {
+        const { error: orgErr } = await supabase.rpc("create_organisation");
+        if (orgErr) {
+          const msg = rpcErrorMessage(orgErr);
+          toast.error(msg);
+          setAnnouncement(msg);
+        }
+        roles = await refreshRoles();
+      }
+    }
+    setLoading(false);
+    toast.success("Welcome back!");
+    navigate(destinationFor(roles), { replace: true });
   };
 
   return (
@@ -39,10 +68,11 @@ const LoginPage = () => {
             <Vote className="h-6 w-6 text-primary-foreground" />
           </div>
           <h1 className="mt-4 text-2xl font-bold">Welcome Back</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Sign in to your BallotBox account</p>
+          <p className="mt-1 text-sm text-muted-foreground">Sign in to your VoteWell Secure account</p>
         </div>
 
         <div className="glass-card mt-8 p-6 sm:p-8">
+          <p className="sr-only" role="status" aria-live="polite">{announcement}</p>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

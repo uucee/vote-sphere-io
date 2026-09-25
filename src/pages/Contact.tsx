@@ -19,7 +19,7 @@ const ContactPage = () => {
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-extrabold text-primary-foreground sm:text-5xl">Get In Touch</h1>
           <p className="mt-5 text-lg text-primary-foreground/70">
-            Have questions about BallotBox? We'd love to help your organisation get started.
+            Have questions about VoteWell Secure? We'd love to help your organisation get started.
           </p>
         </div>
       </section>
