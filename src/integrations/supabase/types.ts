@@ -858,6 +858,61 @@ export type Database = {
           },
         ]
       }
+      tie_resolutions: {
+        Row: {
+          chosen_candidate_ids: string[]
+          election_cycle_id: string
+          group_id: string
+          id: string
+          position_id: string
+          reason: string
+          resolved_at: string
+          resolved_by: string | null
+        }
+        Insert: {
+          chosen_candidate_ids: string[]
+          election_cycle_id: string
+          group_id: string
+          id?: string
+          position_id: string
+          reason: string
+          resolved_at?: string
+          resolved_by?: string | null
+        }
+        Update: {
+          chosen_candidate_ids?: string[]
+          election_cycle_id?: string
+          group_id?: string
+          id?: string
+          position_id?: string
+          reason?: string
+          resolved_at?: string
+          resolved_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tie_resolutions_election_cycle_id_fkey"
+            columns: ["election_cycle_id"]
+            isOneToOne: false
+            referencedRelation: "election_cycles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tie_resolutions_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tie_resolutions_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: true
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -995,6 +1050,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_invitation: { Args: { p_token: string }; Returns: string }
       advance_election: {
         Args: {
           p_election_id: string
@@ -1007,6 +1063,14 @@ export type Database = {
         Returns: undefined
       }
       create_organisation: { Args: never; Returns: string }
+      get_invitation_preview: {
+        Args: { p_token: string }
+        Returns: {
+          email_hint: string
+          group_name: string
+          usable: boolean
+        }[]
+      }
       get_my_ballot: {
         Args: { p_election_id: string }
         Returns: {
@@ -1023,12 +1087,23 @@ export type Database = {
           voters: number
         }[]
       }
+      group_voting_in_progress: {
+        Args: { _group_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
         Returns: boolean
+      }
+      invite_members: {
+        Args: { p_entries: Json; p_group_id: string }
+        Returns: {
+          email: string
+          outcome: string
+        }[]
       }
       is_draft_election_of_group: {
         Args: { _election_id: string; _group_id: string }
@@ -1042,13 +1117,61 @@ export type Database = {
         Args: { _group_id: string; _user_id: string }
         Returns: boolean
       }
+      list_audit_logs: {
+        Args: {
+          p_action?: string
+          p_from?: string
+          p_group_id: string
+          p_limit?: number
+          p_offset?: number
+          p_to?: string
+        }
+        Returns: {
+          action: string
+          actor_email: string
+          actor_name: string
+          created_at: string
+          details: Json
+          entity_id: string
+          entity_type: string
+          id: string
+          total_count: number
+        }[]
+      }
+      resend_invitation: {
+        Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      resolve_tie: {
+        Args: {
+          p_position_id: string
+          p_reason: string
+          p_winner_candidate_ids: string[]
+        }
+        Returns: undefined
+      }
       respond_to_candidacy: {
         Args: { p_accept: boolean; p_candidate_id: string }
+        Returns: undefined
+      }
+      revoke_invitation: {
+        Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      set_member_status: {
+        Args: {
+          p_member_id: string
+          p_status: Database["public"]["Enums"]["member_status"]
+        }
         Returns: undefined
       }
       submit_nomination: {
         Args: { p_nominee_member_id: string; p_position_id: string }
         Returns: string
+      }
+      update_member_name: {
+        Args: { p_full_name: string; p_member_id: string }
+        Returns: undefined
       }
       vote_editing_allowed: {
         Args: { p_election_id: string }
