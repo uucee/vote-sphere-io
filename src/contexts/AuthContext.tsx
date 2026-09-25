@@ -1,9 +1,8 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 
-type AppRole = "global_admin" | "group_admin" | "member";
+export type AppRole = "global_admin" | "group_admin" | "member";
 
 interface Profile {
   id: string;
@@ -19,10 +18,16 @@ interface AuthContextType {
   profile: Profile | null;
   roles: AppRole[];
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    fullName: string,
+    extra?: Record<string, string>
+  ) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
+  refreshRoles: () => Promise<AppRole[]>;
   hasRole: (role: AppRole) => boolean;
   isGroupAdmin: boolean;
   isGlobalAdmin: boolean;
@@ -37,60 +42,93 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [loading, setLoading] = useState(true);
+  const userIdRef = useRef<string | null>(null);
 
   const fetchProfile = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
+    const { data } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
     setProfile(data);
   }, []);
 
-  const fetchRoles = useCallback(async (userId: string) => {
-    const { data } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
-    setRoles((data || []).map((r) => r.role as AppRole));
+  const fetchRoles = useCallback(async (userId: string): Promise<AppRole[]> => {
+    const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+    const r = (data || []).map((row) => row.role as AppRole);
+    setRoles(r);
+    return r;
   }, []);
 
+  const loadUserData = useCallback(
+    async (userId: string) => {
+      await Promise.all([fetchProfile(userId), fetchRoles(userId)]);
+    },
+    [fetchProfile, fetchRoles]
+  );
+
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
+    let active = true;
+
+    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+      if (!active) return;
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) {
-        fetchProfile(s.user.id);
-        fetchRoles(s.user.id);
-      }
-      setLoading(false);
+      userIdRef.current = s?.user?.id ?? null;
+      if (s?.user) await loadUserData(s.user.id);
+      if (active) setLoading(false);
     });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, s) => {
-        setSession(s);
-        setUser(s?.user ?? null);
-        if (s?.user) {
-          fetchProfile(s.user.id);
-          fetchRoles(s.user.id);
-        } else {
-          setProfile(null);
-          setRoles([]);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+      setUser(s?.user ?? null);
+      const newId = s?.user?.id ?? null;
+      const changed = newId !== userIdRef.current;
+      userIdRef.current = newId;
+
+      if (!s?.user) {
+        setProfile(null);
+        setRoles([]);
         setLoading(false);
+        return;
       }
-    );
+      if (!changed) return;
+      // Defer Supabase calls out of the callback to avoid the auth deadlock
+      setLoading(true);
+      const uid = s.user.id;
+      setTimeout(() => {
+        loadUserData(uid).finally(() => {
+          if (active) setLoading(false);
+        });
+      }, 0);
+    });
 
-    return () => subscription.unsubscribe();
-  }, [fetchProfile, fetchRoles]);
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
+  }, [loadUserData]);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const refreshRoles = useCallback(async (): Promise<AppRole[]> => {
+    const { data } = await supabase.auth.getUser();
+    if (!data.user) {
+      setRoles([]);
+      return [];
+    }
+    return fetchRoles(data.user.id);
+  }, [fetchRoles]);
+
+  const signUp = async (
+    email: string,
+    password: string,
+    fullName: string,
+    extra?: Record<string, string>
+  ) => {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: {
+        emailRedirectTo: `${window.location.origin}/login`,
+        data: { ...(extra || {}), full_name: fullName },
+      },
     });
     return { error: error as Error | null };
   };
@@ -129,6 +167,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signIn,
         signOut,
         resetPassword,
+        refreshRoles,
         hasRole,
         isGlobalAdmin: hasRole("global_admin"),
         isGroupAdmin: hasRole("group_admin"),
