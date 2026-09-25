@@ -83,7 +83,7 @@ const ContactPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" required placeholder="john@example.com" />
+                  <Input id="email" type="email" autoComplete="email" required placeholder="john@example.com" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="org">Organisation</Label>

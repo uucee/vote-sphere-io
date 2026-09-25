@@ -203,7 +203,7 @@ const ElectionDetail = () => {
 
       {/* Positions */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold">Positions</h3>
+        <h2 className="text-lg font-semibold">Positions</h2>
         {positions.map((pos) => {
           const posCandidates = candidates.filter(c => c.position_id === pos.id);
           return (

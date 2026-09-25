@@ -44,7 +44,7 @@ const MemberDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Notifications</h3>
+      <h2 className="font-semibold">Notifications</h2>
       <div className="mt-4 space-y-3">
         {[
           { msg: "You've been nominated for Vice President", time: "1 hour ago", urgent: true },
@@ -63,7 +63,7 @@ const MemberDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Quick Actions</h3>
+      <h2 className="font-semibold">Quick Actions</h2>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {[
           { label: "Cast Vote", icon: Vote },

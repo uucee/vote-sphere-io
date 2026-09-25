@@ -144,11 +144,11 @@ const RegisterPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" required placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <Input id="email" type="email" autoComplete="email" required placeholder="john@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <Input id="password" type="password" autoComplete="new-password" required placeholder="Min 8 characters" value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1" onClick={() => setStep(1)}>Back</Button>

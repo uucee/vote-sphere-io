@@ -34,7 +34,7 @@ const GroupDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Election Timeline</h3>
+      <h2 className="font-semibold">Election Timeline</h2>
       <div className="mt-4 space-y-3">
         {timeline.map((t, i) => (
           <div key={i} className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3 last:border-0">
@@ -52,7 +52,7 @@ const GroupDashboard = () => (
     </div>
 
     <div className="glass-card p-5">
-      <h3 className="font-semibold">Quick Actions</h3>
+      <h2 className="font-semibold">Quick Actions</h2>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {[
           { label: "Invite Members", icon: Users },
