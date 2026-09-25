@@ -29,13 +29,13 @@ const HomePage = () => (
               <CheckCircle2 className="mr-1.5 h-3 w-3" />
               Trusted by 500+ organisations
             </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
               Secure Online Voting for Every Organisation
             </h1>
             <p className="mt-5 max-w-lg text-lg leading-relaxed text-primary-foreground/70">
               Run transparent elections, manage nominations, and publish results — all in one platform built for clubs, associations, unions, and communities.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
               <Button variant="hero" size="lg" asChild>
                 <Link to="/register">
                   Start Free Trial <ArrowRight className="ml-1 h-4 w-4" />
@@ -57,7 +57,9 @@ const HomePage = () => (
               alt="Secure digital voting illustration"
               width={520}
               height={390}
-              className="rounded-2xl shadow-xl animate-float"
+              className="rounded-2xl shadow-xl animate-float motion-reduce:animate-none"
+              loading="eager"
+              decoding="async"
             />
           </motion.div>
         </div>
