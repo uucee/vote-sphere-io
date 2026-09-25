@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import NoGroupState from "@/components/NoGroupState";
 
 interface PositionDraft {
   title: string;
@@ -20,7 +22,7 @@ interface PositionDraft {
 
 const ElectionCreate = () => {
   const navigate = useNavigate();
-  const { groupId } = useGroupContext();
+  const { groupId, loading: groupLoading } = useGroupContext();
   const { user } = useAuth();
   const [saving, setSaving] = useState(false);
 
@@ -93,6 +95,17 @@ const ElectionCreate = () => {
     }
   };
 
+  if (groupLoading) {
+    return (
+      <div className="space-y-4" role="status" aria-label="Loading">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-40 w-full" />
+      </div>
+    );
+  }
+
+  if (!groupId) return <NoGroupState title="Create Election" />;
+
   return (
     <div className="max-w-3xl space-y-6">
       <button onClick={() => navigate(-1)} className="flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -117,8 +130,8 @@ const ElectionCreate = () => {
             <Textarea id="desc" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional description…" />
           </div>
           <div className="flex items-center gap-3">
-            <Switch checked={isAdhoc} onCheckedChange={setIsAdhoc} />
-            <Label>Ad-hoc election (no fixed schedule)</Label>
+            <Switch id="adhoc" checked={isAdhoc} onCheckedChange={setIsAdhoc} />
+            <Label htmlFor="adhoc">Ad-hoc election (no fixed schedule)</Label>
           </div>
         </div>
 
@@ -127,20 +140,20 @@ const ElectionCreate = () => {
           <h3 className="font-semibold">Schedule</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Nomination Start</Label>
-              <Input type="datetime-local" value={nominationStart} onChange={(e) => setNominationStart(e.target.value)} />
+              <Label htmlFor="nomination-start">Nomination Start</Label>
+              <Input id="nomination-start" type="datetime-local" value={nominationStart} onChange={(e) => setNominationStart(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Nomination End</Label>
-              <Input type="datetime-local" value={nominationEnd} onChange={(e) => setNominationEnd(e.target.value)} />
+              <Label htmlFor="nomination-end">Nomination End</Label>
+              <Input id="nomination-end" type="datetime-local" value={nominationEnd} onChange={(e) => setNominationEnd(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Voting Start</Label>
-              <Input type="datetime-local" value={votingStart} onChange={(e) => setVotingStart(e.target.value)} />
+              <Label htmlFor="voting-start">Voting Start</Label>
+              <Input id="voting-start" type="datetime-local" value={votingStart} onChange={(e) => setVotingStart(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Voting End</Label>
-              <Input type="datetime-local" value={votingEnd} onChange={(e) => setVotingEnd(e.target.value)} />
+              <Label htmlFor="voting-end">Voting End</Label>
+              <Input id="voting-end" type="datetime-local" value={votingEnd} onChange={(e) => setVotingEnd(e.target.value)} />
             </div>
           </div>
         </div>
@@ -165,21 +178,21 @@ const ElectionCreate = () => {
                 )}
               </div>
               <div className="space-y-2">
-                <Label>Title *</Label>
-                <Input value={pos.title} onChange={(e) => updatePosition(i, "title", e.target.value)} placeholder="e.g. President" />
+                <Label htmlFor={`position-${i}-title`}>Title *</Label>
+                <Input id={`position-${i}-title`} value={pos.title} onChange={(e) => updatePosition(i, "title", e.target.value)} placeholder="e.g. President" />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea value={pos.description} onChange={(e) => updatePosition(i, "description", e.target.value)} placeholder="Role description…" rows={2} />
+                <Label htmlFor={`position-${i}-description`}>Description</Label>
+                <Textarea id={`position-${i}-description`} value={pos.description} onChange={(e) => updatePosition(i, "description", e.target.value)} placeholder="Role description…" rows={2} />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Max Candidates (Top N)</Label>
-                  <Input type="number" min={1} value={pos.max_candidates} onChange={(e) => updatePosition(i, "max_candidates", parseInt(e.target.value) || 1)} />
+                  <Label htmlFor={`position-${i}-max-candidates`}>Max Candidates (Top N)</Label>
+                  <Input id={`position-${i}-max-candidates`} type="number" min={1} value={pos.max_candidates} onChange={(e) => updatePosition(i, "max_candidates", parseInt(e.target.value) || 1)} />
                 </div>
                 <div className="space-y-2">
-                  <Label>Winners</Label>
-                  <Input type="number" min={1} value={pos.max_winners} onChange={(e) => updatePosition(i, "max_winners", parseInt(e.target.value) || 1)} />
+                  <Label htmlFor={`position-${i}-max-winners`}>Winners</Label>
+                  <Input id={`position-${i}-max-winners`} type="number" min={1} value={pos.max_winners} onChange={(e) => updatePosition(i, "max_winners", parseInt(e.target.value) || 1)} />
                 </div>
               </div>
             </div>

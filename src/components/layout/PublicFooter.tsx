@@ -10,7 +10,7 @@ const PublicFooter = () => (
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Vote className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-bold text-foreground">BallotBox</span>
+            <span className="text-lg font-bold text-foreground">VoteWell Secure</span>
           </Link>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
             Secure, transparent online voting for organisations of all sizes.
@@ -40,7 +40,7 @@ const PublicFooter = () => (
         </div>
       </div>
       <div className="mt-10 border-t border-border pt-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} BallotBox. All rights reserved.
+        © {new Date().getFullYear()} VoteWell Secure. All rights reserved.
       </div>
     </div>
   </footer>

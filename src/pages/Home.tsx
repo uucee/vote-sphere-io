@@ -82,7 +82,7 @@ const HomePage = () => (
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold sm:text-4xl">Everything You Need to Run Fair Elections</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            From nominations to results, BallotBox handles the entire election lifecycle with security and transparency.
+            From nominations to results, VoteWell Secure handles the entire election lifecycle with security and transparency.
           </p>
         </div>
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
