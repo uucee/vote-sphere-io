@@ -26,6 +26,11 @@ const GroupDashboard = lazy(() => import("@/pages/group/Dashboard"));
 const GroupElections = lazy(() => import("@/pages/group/Elections"));
 const ElectionCreate = lazy(() => import("@/pages/group/ElectionCreate"));
 const ElectionDetail = lazy(() => import("@/pages/group/ElectionDetail"));
+const GroupMembers = lazy(() => import("@/pages/group/Members"));
+const GroupResults = lazy(() => import("@/pages/group/Results"));
+const GroupAuditLogs = lazy(() => import("@/pages/group/AuditLogs"));
+const GroupBilling = lazy(() => import("@/pages/group/Billing"));
+const InvitePage = lazy(() => import("@/pages/Invite"));
 const MemberDashboard = lazy(() => import("@/pages/member/Dashboard"));
 const MemberNominations = lazy(() => import("@/pages/member/Nominations"));
 const MemberVotePage = lazy(() => import("@/pages/member/VotePage"));
@@ -53,6 +58,7 @@ const App = () => (
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/invite/:token" element={<InvitePage />} />
             </Route>
 
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
@@ -78,13 +84,13 @@ const App = () => (
               </ProtectedRoute>
             }>
               <Route path="/group" element={<GroupDashboard />} />
-              <Route path="/group/members" element={<PlaceholderPage title="Member Management" />} />
+              <Route path="/group/members" element={<GroupMembers />} />
               <Route path="/group/elections" element={<GroupElections />} />
               <Route path="/group/elections/new" element={<ElectionCreate />} />
               <Route path="/group/elections/:id" element={<ElectionDetail />} />
-              <Route path="/group/results" element={<PlaceholderPage title="Results" />} />
-              <Route path="/group/billing" element={<PlaceholderPage title="Billing & Subscription" />} />
-              <Route path="/group/audit" element={<PlaceholderPage title="Audit Logs" />} />
+              <Route path="/group/results" element={<GroupResults />} />
+              <Route path="/group/billing" element={<GroupBilling />} />
+              <Route path="/group/audit" element={<GroupAuditLogs />} />
               <Route path="/group/settings" element={<PlaceholderPage title="Group Settings" />} />
             </Route>
 

@@ -10,6 +10,9 @@ const UnauthorizedPage = () => (
       <p className="mt-2 text-muted-foreground">
         You don't have permission to access this page.
       </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        If you've been invited to an organisation, open the link in your invitation to join.
+      </p>
       <div className="mt-6 flex justify-center gap-3">
         <Button asChild variant="outline">
           <Link to="/">Go Home</Link>

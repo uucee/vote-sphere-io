@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useGroupContext } from "@/hooks/useGroupContext";
 import { Button } from "@/components/ui/button";
@@ -68,6 +68,7 @@ const ElectionDetail = () => {
   const [advancing, setAdvancing] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
+  const [tieBlocked, setTieBlocked] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!id) { setLoading(false); return; }
@@ -137,9 +138,15 @@ const ElectionDetail = () => {
     });
     if (error) {
       const msg = rpcErrorMessage(error);
-      toast.error(msg);
+      const code = rpcErrorCode(error);
+      if (code === "UNRESOLVED_TIE") {
+        toast.error(msg, { action: { label: "Go to results", onClick: () => navigate("/group/results") } });
+        setTieBlocked(true);
+      } else {
+        toast.error(msg);
+      }
       setAnnouncement(msg);
-      if (rpcErrorCode(error) === "STATUS_CHANGED") await loadData();
+      if (code === "STATUS_CHANGED") await loadData();
     } else {
       const msg = `Election moved to: ${statusLabel(String(data))}.`;
       toast.success(msg);
@@ -184,6 +191,14 @@ const ElectionDetail = () => {
   return (
     <div className="max-w-4xl space-y-6">
       <p className="sr-only" role="status" aria-live="polite">{announcement}</p>
+      {tieBlocked && (
+        <div role="alert" className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm">
+          <p className="font-medium">Resolve all ties before publishing results.</p>
+          <Link to="/group/results" className="mt-2 inline-flex min-h-[44px] items-center font-medium text-primary underline underline-offset-4">
+            Go to results to resolve ties
+          </Link>
+        </div>
+      )}
       <button onClick={() => navigate("/group/elections")} className="flex min-h-[44px] items-center gap-1 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
         <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to elections
       </button>

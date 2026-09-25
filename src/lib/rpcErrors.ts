@@ -20,6 +20,24 @@ const MESSAGES: Record<string, string> = {
     "Every position needs at least one accepted candidate before voting can open.",
   EMAIL_NOT_CONFIRMED: "Please confirm your email address first.",
   NO_PENDING_ORGANISATION: "There is no organisation linked to this account.",
+  MEMBERSHIP_LOCKED_DURING_VOTING: "Membership can't be changed while voting is open.",
+  NO_ENTRIES: "Add at least one email address.",
+  TOO_MANY_ENTRIES: "You can invite up to 500 people at a time.",
+  INVITATION_NOT_FOUND: "This invitation link isn't valid. Ask your administrator for a new one.",
+  INVITATION_NOT_PENDING: "This invitation has already been used or cancelled.",
+  INVITATION_EXPIRED: "This invitation has expired. Ask your administrator to resend it.",
+  INVITATION_EMAIL_MISMATCH:
+    "This invitation was sent to a different email address. Sign in with that address to accept it.",
+  ALREADY_A_MEMBER: "You're already a member of this organisation.",
+  INVALID_STATUS: "That status change isn't allowed.",
+  MEMBER_NOT_JOINED: "This person hasn't accepted their invitation yet.",
+  NAME_REQUIRED: "Please enter a name.",
+  RESULTS_NOT_IN_REVIEW: "Ties can only be resolved while results are under review.",
+  REASON_REQUIRED: "Please record the reason for this decision.",
+  NO_TIE: "There is no tie to resolve for this position.",
+  INVALID_TIE_SELECTION:
+    "Choose exactly the number of tied candidates needed to fill the remaining seats.",
+  UNRESOLVED_TIE: "Resolve all ties before publishing results.",
 };
 
 export const GENERIC_ERROR = "Something went wrong. Please try again.";

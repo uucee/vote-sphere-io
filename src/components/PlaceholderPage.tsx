@@ -5,7 +5,7 @@ const PlaceholderPage = ({ title }: { title: string }) => (
     </div>
     <h2 className="mt-4 text-xl font-semibold">{title}</h2>
     <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-      This section is under development. Connect Lovable Cloud to enable full backend functionality.
+      This section is coming soon.
     </p>
   </div>
 );
